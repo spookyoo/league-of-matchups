@@ -1,0 +1,32 @@
+services:
+  sqldb:
+    image: mysql
+    container_name: db
+    volumes:
+     - "C:/Users/m_lvi/Desktop/REJECT-HOMELESSNESS/league-of-matchups/dbfiles:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+  server:
+    image: matchups
+    container_name: server
+    ports:
+      - "3000:3000"
+    volumes:
+      - "C:/Users/m_lvi/Desktop/REJECT-HOMELESSNESS/league-of-matchups/backend:/app"
+    environment:
+      DB_HOST: sqldb
+      DB_PORT: 3306
+      DB_DATABASE: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      sqldb:
+        condition: service_started
+    command: ["node","server.js"]
+    stdin_open: true
+    tty: true
