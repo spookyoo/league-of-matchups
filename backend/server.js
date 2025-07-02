@@ -37,6 +37,7 @@ const createTables = (db) => {
         `CREATE TABLE IF NOT EXISTS champions (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(16) NOT NULL UNIQUE,
+            imgPath VARCHAR(255),
             about TEXT
     )`,
     (err, result) => {
@@ -62,6 +63,16 @@ const createTables = (db) => {
     }
     );
 }
+
+app.get("/champions", (req, res) => {
+    db.query("SELECT name FROM champions", (err, results) => {
+        if (err) {
+            console.error("ERROR FETCHING champion DATA", err);
+            return res.status(500).json({error: "DATABASE ERROR"});
+        }
+        res.json(results);
+    });
+});
 
 // app.use(express.static(__dirname));
 
