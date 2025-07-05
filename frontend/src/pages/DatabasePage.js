@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState} from 'react';
+import axios from "axios"
 
 const DatabasePage = () => {
     const navigate = useNavigate();
