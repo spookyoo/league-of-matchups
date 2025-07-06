@@ -8,16 +8,14 @@ const DatabasePage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:3000/champions")
-        .then(res => {
-            if (!res.ok) throw new Error("FAILED TO FETCH");
-            return res.json();
-        })
-        .then(data => setChampions(data))
-        .catch(err => {
-            console.error("ERROR FETCHING: ", err);
-            setError("Could not load champions");
-        });
+        axios.get("http://localhost:3000/champions")
+            .then(response => {
+                setChampions(response.data);
+            })
+            .catch(error => {
+                console.error("ERROR FETCHING: ", error);
+                setError("Could not load champions");
+            });
     }, []);
 
     return (
