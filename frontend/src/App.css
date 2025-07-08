@@ -1,13 +1,13 @@
-/* @font-face {
+@font-face {
   font-family: 'Beaufort';
   src: url('./assets/fonts/BeaufortforLOL-Regular.otf') format('opentype');
   font-style: normal;
-} */
+}
 
 @font-face {
   font-family: 'Beaufort';
   src: url("./assets/fonts/BeaufortforLOL-Bold.otf") format("opentype");
-  font-weight: 700;
+  font-weight: bold;
   font-style: normal;
 }
 
@@ -15,6 +15,7 @@ body {
   font-family: "Beaufort", serif;
   color: #F9F9F9;
   background-color: #1E1E1E;
+  font-weight: bold;
 }
 
 .database-page {
@@ -24,6 +25,61 @@ body {
   text-align: center;
 }
 
+.navbar {
+  display: flex;
+  background-color:#333333;
+  width: 100vw;
+  height: 36px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.navbar p {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.database-page-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.database-page-content h1 {
+  margin: 0px;
+  margin-top: 60px;
+}
+
+.contentDivider {
+  height: 4px;
+  background-color: #333333;
+}
+
+.searchbar {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.searchbar input {
+  border: none;
+  height: 40px;
+  width: 12vw;
+  border-radius: 15px;
+  outline: none;
+  background-color: #333333;
+  font-size: 18px;
+  font-family: "Beaufort";
+  font-weight: bold;
+  padding-left: 16px;
+  caret-color: #9D9D9D;
+  color: #F9F9F9
+}
+
+.searchbar input::placeholder{
+  color: #9D9D9D
+}
+
 .championContainer {
   display: flex;
   flex-direction: row;
@@ -31,7 +87,7 @@ body {
   background-color: #333333;
   width: 50vw;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .championContainer img {

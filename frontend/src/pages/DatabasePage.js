@@ -3,6 +3,8 @@ import React, { useEffect, useState} from 'react';
 import axios from "axios"
 
 import ChampionContainer from "../components/ChampionContainer";
+import Navbar from "../components/Navbar";
+import Searchbar from "../components/Searchbar";
 
 const DatabasePage = () => {
     const navigate = useNavigate();
@@ -22,11 +24,11 @@ const DatabasePage = () => {
 
     return (
     <div className="database-page">
-      <div className="navbar">
-        <h1>LEAGUE OF MATCHUPS</h1>
-      </div>
-      <div className="main"></div>
-        <h3>Choose a champion</h3>
+      <Navbar />
+      <div className="database-page-content">
+        <h1>LoL Matchup Database</h1>
+        <div className="contentDivider"></div>
+        <Searchbar />
         <div className="championList">
           {champions.map((champion) => (
             // <button key={champion.name} className="championButton">
@@ -35,6 +37,7 @@ const DatabasePage = () => {
             <ChampionContainer name={champion.name}/>
           ))}
         </div>
+      </div>
     </div>
     );
 };
