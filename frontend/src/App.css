@@ -1,9 +1,48 @@
+/* @font-face {
+  font-family: 'Beaufort';
+  src: url('./assets/fonts/BeaufortforLOL-Regular.otf') format('opentype');
+  font-style: normal;
+} */
+
+@font-face {
+  font-family: 'Beaufort';
+  src: url("./assets/fonts/BeaufortforLOL-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  font-family: "Beaufort", serif;
+  color: #F9F9F9;
+  background-color: #1E1E1E;
+}
+
 .database-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
 
+.championContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #333333;
+  width: 50vw;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.championContainer img {
+  height: 80px;
+  width: 80px;
+  padding: 20px;
+  padding-right: 35px;
+}
+
+.championContainer p {
+  font-size: 30px;
 }
 
 .championList {

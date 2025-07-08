@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState} from 'react';
 import axios from "axios"
 
+import ChampionContainer from "../components/ChampionContainer";
+
 const DatabasePage = () => {
     const navigate = useNavigate();
     const [champions, setChampions] = useState([]);
@@ -27,9 +29,10 @@ const DatabasePage = () => {
         <h3>Choose a champion</h3>
         <div className="championList">
           {champions.map((champion) => (
-            <button key={champion.name} className="championButton">
-              {champion.name}
-            </button>
+            // <button key={champion.name} className="championButton">
+            //   {champion.name}
+            // </button>
+            <ChampionContainer name={champion.name}/>
           ))}
         </div>
     </div>

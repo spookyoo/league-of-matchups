@@ -37,7 +37,6 @@ const createTables = (db) => {
         `CREATE TABLE IF NOT EXISTS champions (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(16) NOT NULL UNIQUE,
-            imgPath VARCHAR(255),
             about TEXT
     )`,
     (err, result) => {
