@@ -37,7 +37,7 @@ const createTables = (db) => {
         `CREATE TABLE IF NOT EXISTS champions (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(16) NOT NULL UNIQUE,
-            about TEXT
+            api VARCHAR(16) NOT NULL
     )`,
     (err, result) => {
         if (err) console.error("ERROR CREATING champion TABLE", err);
@@ -63,10 +63,28 @@ const createTables = (db) => {
     );
 }
 
+app.get("/champion", (req, res) => {
+    const name = req.query.name;
+
+    if (!name) {
+        return res.status(400).json({ error: "MISSING NAME"});
+    }
+
+    db.query(
+        "SELECT api FROM champions WHERE LOWER(name) = LOWER(?)", [name], (err, results) => {
+            if (err) {
+                console.error("ERROR FETCHING champion API", err);
+                return res.status(500).json({error: "DATABASE ERROR"});
+            }
+            res.json({api:results[0].api});
+        }
+    );
+});
+
 app.get("/champions", (req, res) => {
-    db.query("SELECT name FROM champions", (err, results) => {
+    db.query("SELECT name, api FROM champions", (err, results) => {
         if (err) {
-            console.error("ERROR FETCHING champion DATA", err);
+            console.error("ERROR FETCHING champions DATA", err);
             return res.status(500).json({error: "DATABASE ERROR"});
         }
         res.json(results);

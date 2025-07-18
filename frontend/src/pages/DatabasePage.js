@@ -31,9 +31,7 @@ const DatabasePage = () => {
         <Searchbar />
         <div className="championList">
           {champions.map((champion) => (
-            <React.Fragment key={champion.name}>
-              <ChampionContainer name={champion.name} onClick={() => navigate(`/matchups/${champion.name}`)}/>
-            </React.Fragment>
+            <ChampionContainer name={champion.name} api={champion.api}/>
           ))}
         </div>
       </div>

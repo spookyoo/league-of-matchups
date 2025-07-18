@@ -112,3 +112,29 @@ body {
   transform: scale(1.05, 1.05);
   background-color: #4B4B4B;
 }
+
+.titlebar {
+  display: flex;
+  flex-direction: row;
+  margin-top: 36px;
+  align-items: flex-end;
+  /* background-color: rgb(5, 62, 112); */
+}
+
+.titlebar img {
+  height: 60px;
+  width: 60px;
+  margin-bottom: 4px;
+  margin-left: 10px;
+}
+
+.titlebar-champion {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.titlebar-champion p {
+  margin: 10px;
+  font-size: 28px;
+}
