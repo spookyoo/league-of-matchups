@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import beaufortRegular from './assets/fonts/BeaufortforLOL-Regular.otf';
 import beaufortBold from './assets/fonts/BeaufortforLOL-Bold.otf';
 
@@ -10,6 +10,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/matchups" replace />} />
         <Route path="/matchups" element={<LandingPage />} />
         <Route path="/matchups/:name" element={<ChampionMatchupPage />}  />
       </Routes>

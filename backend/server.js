@@ -13,6 +13,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+console.log(process.env.MYSQL_USER);
+console.log(process.env.MYSQL_PASSWORD);
+
 const db = sqldb.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -49,12 +52,10 @@ const createTables = (db) => {
         `CREATE TABLE IF NOT EXISTS matchups (
             id INT AUTO_INCREMENT PRIMARY KEY,
             playerId INT NOT NULL,
-            opponentId INT NOT NULL,
+            opponentName VARCHAR(16) NOT NULL,
             difficulty TINYINT UNSIGNED NOT NULL CHECK (difficulty BETWEEN 1 AND 9),
-            notes TEXT,
-            UNIQUE (playerId, opponentId),
-            FOREIGN KEY (playerId) REFERENCES champions(id),
-            FOREIGN KEY (opponentId) REFERENCES champions(id)
+            UNIQUE (playerId, opponentName),
+            FOREIGN KEY (playerId) REFERENCES champions(id)
     )`,
     (err, result) => {
         if (err) console.error("ERROR CREATING champion TABLE", err);
@@ -70,8 +71,7 @@ app.get("/champion", (req, res) => {
         return res.status(400).json({ error: "MISSING NAME"});
     }
 
-    db.query(
-        "SELECT api FROM champions WHERE LOWER(name) = LOWER(?)", [name], (err, results) => {
+    db.query("SELECT api FROM champions WHERE LOWER(name) = LOWER(?)", [name], (err, results) => {
             if (err) {
                 console.error("ERROR FETCHING champion API", err);
                 return res.status(500).json({error: "DATABASE ERROR"});
@@ -82,12 +82,35 @@ app.get("/champion", (req, res) => {
 });
 
 app.get("/champions", (req, res) => {
-    db.query("SELECT name, api FROM champions", (err, results) => {
+    db.query("SELECT id, name, api FROM champions", (err, results) => {
         if (err) {
             console.error("ERROR FETCHING champions DATA", err);
             return res.status(500).json({error: "DATABASE ERROR"});
         }
         res.json(results);
+    });
+});
+
+app.get("/matchups", (req, res) => {
+    
+});
+
+app.post("/matchups", (req, res) => {
+    const { playerId, difficulty, opponentName } = req.body;
+
+    if (!playerId || !difficulty || !opponentName) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+    if (difficulty < 1 || difficulty > 9) {
+        return res.status(400).json({ error: "Difficulty must be between 1 and 9" });
+    }
+
+    db.query("INSERT INTO matchups (playerId, difficulty, opponentName) VALUES (?, ?, ?)", [playerId, difficulty, opponentName], (err, result) => {
+        if (err) {
+            console.error("ERROR INSERTING matchup", err);
+            return res.status(500).json({ error: "DATABASE ERROR" });
+        }
+        res.status(201).json({ message: "MATCHUP ADDED" });
     });
 });
 
