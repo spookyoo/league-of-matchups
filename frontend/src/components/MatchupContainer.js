@@ -13,7 +13,7 @@ function useLatest() {
   return latest
 }
 
-function MatchupContainer({name, api}) {
+function MatchupContainer({name, api, difficulty}) {
     const latest = useLatest();
     
     return (

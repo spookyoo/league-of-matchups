@@ -2,7 +2,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import React, { useEffect, useState} from 'react';
 import axios from "axios"
 
-import ChampionContainer from "../components/ChampionContainer";
 import MatchupContainer from "../components/MatchupContainer";
 import Navbar from "../components/Navbar";
 import Searchbar from "../components/Searchbar";
@@ -13,10 +12,12 @@ const ChampionMatchupPage = () => {
     const {name} = useParams();
     const [apiName, setApiName] = useState("");
     const [champId, setChampId] = useState("");
-    const [matchups, setMatchups] = useState("");
+    const [matchups, setMatchups] = useState([]);
 
     const [opponentId, setOpponentId] = useState("");
     const [difficulty, setDifficulty] = useState("");
+    const [champMap, setChampMap] = useState({});
+
 
     useEffect(() => {
       let version = ""
@@ -31,6 +32,15 @@ const ChampionMatchupPage = () => {
         .then(data => {
           const allChamps = Object.values(data.data);
           const match = allChamps.find(champ => champ.name.toLowerCase() === name.toLowerCase());
+
+          const champMapObj = {};
+          allChamps.forEach(champ => {
+            champMapObj[champ.key] = {
+              name: champ.name,
+              api: champ.id,
+            };
+          });
+          setChampMap(champMapObj);
 
           if (match) {
             setApiName(match.id);
@@ -49,10 +59,22 @@ const ChampionMatchupPage = () => {
         params: { playerId: champId }
       })
       .then(response => {
-        setMatchups(response.data);
+        const converted = response.data
+          .map((matchup) => {
+            const champ = champMap[matchup.opponentId];
+            if (!champ) return null;
+
+            return {
+              name: champ.name,
+              api: champ.api,
+              difficulty: matchup.difficulty
+            };
+          })
+        .filter(matchup => matchup !== null);
+        setMatchups(converted);
       })
       .catch(error => console.error("ERROR FETCHING MATCHUPS: ", error));
-    }, [champId]);
+    }, [champId, champMap]);
 
     const formatChampions = (name) => {
         return name.charAt(0).toUpperCase() + name.slice(1);
@@ -97,8 +119,10 @@ const ChampionMatchupPage = () => {
         <div className="contentDivider"></div>
         <Searchbar />
         <div className="championList">
-          <MatchupContainer></MatchupContainer>
-          <ChampionContainer></ChampionContainer>
+            {matchups.map((matchup) => (
+            <MatchupContainer name={matchup.name} api={matchup.api} difficulty={matchup.difficulty}
+            />
+          ))}
           <div className="insertContainer">
             <form onSubmit={handleSubmit}>
               <input

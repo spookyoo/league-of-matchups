@@ -52,7 +52,7 @@ const createTables = (db) => {
 }
 
 app.get("/matchups", (req, res) => {
-    const playerId = req.query.playerdId;
+    const playerId = req.query.playerId;
 
     if (!playerId) {
         return res.status(400).json({ error: "MISSING ID" });
