@@ -35,18 +35,6 @@ db.connect((err) => {
 });
 
 const createTables = (db) => {
-    // CHAMPION TABLES
-    db.query(
-        `CREATE TABLE IF NOT EXISTS champions (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(16) NOT NULL UNIQUE,
-            api VARCHAR(16) NOT NULL
-    )`,
-    (err, result) => {
-        if (err) console.error("ERROR CREATING champion TABLE", err);
-        else console.log("CHAMPIONS TABLE CREATED");
-    }
-    );
     // MATCHUP TABLES
     db.query(
         `CREATE TABLE IF NOT EXISTS matchups (
@@ -64,45 +52,30 @@ const createTables = (db) => {
     );
 }
 
-app.get("/champion", (req, res) => {
-    const name = req.query.name;
+app.get("/matchups", (req, res) => {
+    const playerId = req.query.playerdId;
 
-    if (!name) {
-        return res.status(400).json({ error: "MISSING NAME"});
+    if (!playerId) {
+        return res.status(400).json({ error: "MISSING ID" });
     }
 
-    db.query("SELECT api FROM champions WHERE LOWER(name) = LOWER(?)", [name], (err, results) => {
-            if (err) {
-                console.error("ERROR FETCHING champion API", err);
-                return res.status(500).json({error: "DATABASE ERROR"});
-            }
-            res.json({api:results[0].api});
-        }
-    );
-});
-
-app.get("/champions", (req, res) => {
-    db.query("SELECT id, name, api FROM champions", (err, results) => {
+    db.query("SELECT opponentName, difficulty FROM matchups WHERE playerId = ?", [playerId], (err, results) => {
         if (err) {
-            console.error("ERROR FETCHING champions DATA", err);
+            console.error("ERROR FETCHING matchups", err);
             return res.status(500).json({error: "DATABASE ERROR"});
         }
         res.json(results);
     });
 });
 
-app.get("/matchups", (req, res) => {
-    
-});
-
 app.post("/matchups", (req, res) => {
     const { playerId, difficulty, opponentName } = req.body;
 
     if (!playerId || !difficulty || !opponentName) {
-        return res.status(400).json({ error: "Missing required fields" });
+        return res.status(400).json({ error: "MISSING FIELDS" });
     }
     if (difficulty < 1 || difficulty > 9) {
-        return res.status(400).json({ error: "Difficulty must be between 1 and 9" });
+        return res.status(400).json({ error: "DIFFICULTY MUST BE BETWEEN 1 AND 9" });
     }
 
     db.query("INSERT INTO matchups (playerId, difficulty, opponentName) VALUES (?, ?, ?)", [playerId, difficulty, opponentName], (err, result) => {

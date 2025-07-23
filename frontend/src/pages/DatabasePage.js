@@ -11,16 +11,21 @@ const DatabasePage = () => {
     const [champions, setChampions] = useState([]);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        axios.get("http://localhost:3000/champions")
-            .then(response => {
-                setChampions(response.data);
-            })
-            .catch(error => {
-                console.error("ERROR FETCHING: ", error);
-                setError("Could not load champions");
-            });
-    }, []);
+useEffect(() => {
+  axios.get("https://ddragon.leagueoflegends.com/api/versions.json")
+    .then(res => {
+      const latest = res.data[0];
+      return axios.get(`https://ddragon.leagueoflegends.com/cdn/${latest}/data/en_US/champion.json`);
+    })
+    .then(res => {
+      const championList = Object.values(res.data.data).map(champ => ({
+        name: champ.name,
+        api: champ.id
+      }));
+      setChampions(championList);
+    })
+    .catch(err => console.error("FAILED TO FETCH", err));
+}, []);
 
     return (
     <div className="database-page">
