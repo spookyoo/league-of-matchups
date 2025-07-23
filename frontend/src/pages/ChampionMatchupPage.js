@@ -3,18 +3,20 @@ import React, { useEffect, useState} from 'react';
 import axios from "axios"
 
 import ChampionContainer from "../components/ChampionContainer";
+import MatchupContainer from "../components/MatchupContainer";
 import Navbar from "../components/Navbar";
 import Searchbar from "../components/Searchbar";
 
 const ChampionMatchupPage = () => {
-    const navigate = useNavigate();
-    const [champions, setChampions] = useState("");
     const [latest, setLatest] = useState("");
 
     const {name} = useParams();
     const [apiName, setApiName] = useState("");
     const [champId, setChampId] = useState("");
     const [matchups, setMatchups] = useState("");
+
+    const [opponentId, setOpponentId] = useState("");
+    const [difficulty, setDifficulty] = useState("");
 
     useEffect(() => {
       let version = ""
@@ -32,11 +34,12 @@ const ChampionMatchupPage = () => {
 
           if (match) {
             setApiName(match.id);
+            setChampId(match.key);
           } else {
             console.error("CHAMP NOT FOUND");
           }
         })
-        .catch(err => console.error("Error fetching Riot data:", err));
+        .catch(err => console.error("ERROR FETCHING", err));
     }, [name]);
 
     useEffect(() => {
@@ -55,6 +58,30 @@ const ChampionMatchupPage = () => {
         return name.charAt(0).toUpperCase() + name.slice(1);
     };
 
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      console.log("Submitting with:", {
+        playerId: champId,
+        opponentId,
+        difficulty,
+      });
+
+      axios.post("http://localhost:3000/matchups", {
+        playerId: parseInt(champId, 10),
+        opponentId: parseInt(opponentId, 10),
+        difficulty: parseInt(difficulty, 10),
+      })
+      .then(response => {
+        setOpponentId("");
+        setDifficulty("");
+      })
+      .catch(error => {
+        console.error("FAILED TO SUBMIT:", error);
+        alert("ERROR SUBMITTING");
+      });
+    };
+
     return (
     <div className="database-page">
       <Navbar />
@@ -70,6 +97,25 @@ const ChampionMatchupPage = () => {
         <div className="contentDivider"></div>
         <Searchbar />
         <div className="championList">
+          <MatchupContainer></MatchupContainer>
+          <ChampionContainer></ChampionContainer>
+          <div className="insertContainer">
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="opp"
+                value={opponentId}
+                onChange={(e) => setOpponentId(e.target.value)}
+                />
+              <input
+                type="text"
+                placeholder="difficulty"
+                value={difficulty}
+                onChange={(e) => setDifficulty(e.target.value)}
+              />
+              <button>Submit</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

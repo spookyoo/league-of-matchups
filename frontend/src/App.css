@@ -99,7 +99,8 @@ body {
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.championContainer img {
+.championContainer img,
+.matchupContainer img {
   height: 80px;
   width: 80px;
   padding: 20px;
@@ -110,9 +111,22 @@ body {
   font-size: 30px;
 }
 
-.championContainer:hover {
+.championContainer:hover,
+.matchupContainer:hover {
   transform: scale(1.05, 1.05);
   background-color: #4B4B4B;
+}
+
+.matchupContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #333333;
+  width: 50vw;
+  height: 120px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .titlebar {
@@ -139,4 +153,15 @@ body {
 .titlebar-champion p {
   margin: 10px;
   font-size: 28px;
+}
+
+.insertContainer {
+  display:flex;
+  flex-direction: row;
+  width: 50vw;
+  height: 120px;
+  border-radius: 6px;
+  align-items: center;
+  background-color: #333333;
+  order: 1;
 }

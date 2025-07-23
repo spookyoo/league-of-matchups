@@ -58,7 +58,7 @@ app.get("/matchups", (req, res) => {
         return res.status(400).json({ error: "MISSING ID" });
     }
 
-    db.query("SELECT opponentName, difficulty FROM matchups WHERE playerId = ?", [playerId], (err, results) => {
+    db.query("SELECT opponentId, difficulty FROM matchups WHERE playerId = ?", [playerId], (err, results) => {
         if (err) {
             console.error("ERROR FETCHING matchups", err);
             return res.status(500).json({error: "DATABASE ERROR"});
@@ -68,16 +68,16 @@ app.get("/matchups", (req, res) => {
 });
 
 app.post("/matchups", (req, res) => {
-    const { playerId, difficulty, opponentName } = req.body;
+    const { playerId, difficulty, opponentId } = req.body;
 
-    if (!playerId || !difficulty || !opponentName) {
+    if (!playerId || !difficulty || !opponentId) {
         return res.status(400).json({ error: "MISSING FIELDS" });
     }
     if (difficulty < 1 || difficulty > 9) {
-        return res.status(400).json({ error: "DIFFICULTY MUST BE BETWEEN 1 AND 9" });
+        return res.status(401).json({ error: "DIFFICULTY MUST BE BETWEEN 1 AND 9" });
     }
 
-    db.query("INSERT INTO matchups (playerId, difficulty, opponentName) VALUES (?, ?, ?)", [playerId, difficulty, opponentName], (err, result) => {
+    db.query("INSERT INTO matchups (playerId, difficulty, opponentId) VALUES (?, ?, ?)", [playerId, difficulty, opponentId], (err, result) => {
         if (err) {
             console.error("ERROR INSERTING matchup", err);
             return res.status(500).json({ error: "DATABASE ERROR" });
