@@ -40,13 +40,12 @@ const createTables = (db) => {
         `CREATE TABLE IF NOT EXISTS matchups (
             id INT AUTO_INCREMENT PRIMARY KEY,
             playerId INT NOT NULL,
-            opponentName VARCHAR(16) NOT NULL,
+            opponentId INT NOT NULL,
             difficulty TINYINT UNSIGNED NOT NULL CHECK (difficulty BETWEEN 1 AND 9),
-            UNIQUE (playerId, opponentName),
-            FOREIGN KEY (playerId) REFERENCES champions(id)
+            UNIQUE (playerId, opponentId)
     )`,
     (err, result) => {
-        if (err) console.error("ERROR CREATING champion TABLE", err);
+        if (err) console.error("ERROR CREATING matchup TABLE", err);
         else console.log("MATCHUPS TABLE CREATED");
     }
     );
